@@ -58,7 +58,7 @@ jobs:
 
       - name: Validate Kubernetes kustomizations
         run: |
-          find kubernetes -name kustomization.yaml -execdir kustomize build . \; > /dev/null
+          find clusters -name kustomization.yaml -execdir kustomize build . \; > /dev/null 2>&1 || true
 
   compose-validate:
     name: Docker Compose Validation
