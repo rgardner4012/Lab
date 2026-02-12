@@ -1,0 +1,38 @@
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  name: m-031e7438-5308-4d8f-bed6-27d8bd173398
+  namespace: longhorn-system
+spec:
+  allowScheduling: true
+  disks:
+    opt-disk:
+      path: /opt/longhorn
+      allowScheduling: true
+      storageReserved: 21474836480
+---
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  name: m-4241f991-904d-48b6-9425-720e9897fccc
+  namespace: longhorn-system
+spec:
+  allowScheduling: true
+  disks:
+    opt-disk:
+      path: /opt/longhorn
+      allowScheduling: true
+      storageReserved: 21474836480
+---
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  name: m-a49fbfae-6bf2-4c70-adf9-e60a81570670
+  namespace: longhorn-system
+spec:
+  allowScheduling: true
+  disks:
+    opt-disk:
+      path: /opt/longhorn
+      allowScheduling: true
+      storageReserved: 21474836480

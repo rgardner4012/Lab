@@ -1,0 +1,34 @@
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: default-data-path
+  namespace: longhorn-system
+value: /opt/longhorn
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: default-replica-count
+  namespace: longhorn-system
+value: '{"v1":"3","v2":"3"}'
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: storage-reserved-percentage-for-default-disk
+  namespace: longhorn-system
+value: "30"
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: replica-disk-soft-anti-affinity
+  namespace: longhorn-system
+value: "true"
+---
+apiVersion: longhorn.io/v1beta2
+kind: Setting
+metadata:
+  name: node-down-pod-deletion-policy
+  namespace: longhorn-system
+value: do-nothing
