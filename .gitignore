@@ -1,3 +1,95 @@
+# ========================
+# Secrets & Credentials
+# ========================
+# Decrypted .env files (only .env.sops and .env.example belong in Git)
+.env
+.env.local
+.env.*.local
+!.env.example
+!.env.sops
+
+# Age private keys
+age.key
+*.age
+!*.age.pub
+
+# SSH keys
+id_rsa
+id_ed25519
+*.pem
+*.key
+
+# OpenBao / Vault
+init-keys.json
+unseal-keys.json
+*.unseal
+.vault-token
+
+# Kubeconfig
+kubeconfig
+kubeconfig.yaml
+*.kubeconfig
+
+# SOPS decrypted output
+*.dec
+*.decrypted
+*.cleartext
+
+# ========================
+# Ansible
+# ========================
+*.retry
+inventory/*.yml.bak
+
+# ========================
+# Kubernetes
+# ========================
+# Flux bootstrap generates these — they belong in Git,
+# but local tmp copies don't
+*.tmp.yaml
+
+# ========================
+# OS & Editor
+# ========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+._*
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+
+# Vim
+*.swp
+*.swo
+*~
+
+# ========================
+# Python (pre-commit, ansible)
+# ========================
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ========================
+# Node (if Renovate runs locally)
+# ========================
+node_modules/
+
+# ========================
+# Misc
+# ========================
+*.log
+*.bak
+*.backup
+tmp/
+.cache/
+
 # Local .terraform directories
 .terraform/
 
@@ -10,8 +102,8 @@ crash.log
 crash.*.log
 
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version 
-# control as they are data points which are potentially sensitive and subject 
+# password, private keys, and other secrets. These should not be part of version
+# control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json

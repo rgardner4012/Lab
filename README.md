@@ -1,0 +1,66 @@
+# 🏠 Homelab GitOps
+
+A hybrid homelab managed entirely through GitOps — Docker Compose stacks on a NAS for media workloads, and a 3-node RKE2 Kubernetes cluster for platform services.
+
+## Hardware
+
+| Device | Role | CPU | RAM | Storage | OS |
+| -------- | ------ | ----- | ----- | --------- | ---- |
+| UGREEN DXP6800 Pro | NAS + Docker host | Intel i5-1235U | 40Gb | 36TB | UGOS |
+| Intel NUC #1 | RKE2 worker | Intel Core i5-8259U | 32Gb | 500Gb | Elemental OS |
+| Intel NUC #2 | RKE2 worker | Intel Core i7-8559U | 32Gb | 250Gb | Elemental OS |
+| Intel NUC #3 | RKE2 worker | Intel Core i7-8559U | 32Gb | 250Gb | Elemental OS |
+
+## Repository Structure
+
+```text
+homelab/
+├── .github/workflows/         # CI/CD — linting, Flux diff, NAS deploy
+├── docs/                      # Architecture, decisions, runbooks
+│   ├── adr.md                 # Architecture Decision Records
+│   ├── bootstrap.md           # Cluster bootstrap procedure
+│   ├── naming-and-ips.md      # Hostnames, VLANs, IP allocations
+│   └── disaster-recovery.md   # Backup strategy, restore procedures
+│
+├── docker/                    # NAS Docker Compose stacks
+│   ├── plex/
+│   ├── pihole/
+│   └── vpn-stack/
+│
+└── clusters/
+    └── hlcl1/                 # RKE2 cluster (Flux CD managed)
+        ├── flux-system/       # Flux bootstrap
+        ├── kustomization.yaml # Cluster entrypoint
+        ├── vars/              # Cluster-specific values (IPs, domains)
+        │   └── cluster-config.yaml
+        ├── infra/             # Foundational platform components
+        │   ├── metallb/
+        │   ├── traefik/
+        │   ├── cert-manager/
+        │   ├── external-dns/
+        │   └── storage/
+        │       ├── longhorn/
+        │       └── nfs/
+        └── apps/              # Cluster applications
+            ├── pihole/
+            └── monitoring/
+```
+
+## Why Hybrid?
+
+Media workloads (Plex, Sonarr, Radarr, torrenting) stay on the NAS as Docker Compose stacks because they need local filesystem access for **hardlinks** (no storage duplication), **QuickSync hardware transcoding**, and direct disk I/O. Kubernetes adds complexity without benefit here.
+
+Platform services (DNS, monitoring, ingress, secrets management) run on the RKE2 cluster where they benefit from orchestration, self-healing, and LoadBalancer IPs.
+
+See [ADR-005](docs/adr.md) for the full rationale.
+
+## Getting Started
+
+See [docs/setup-guide.md](docs/setup-guide.md) for the full bootstrap procedure.
+
+## Docs
+
+- [Architecture](docs/architecture.md) — service map, data flows, storage topology
+- [Hardware](docs/hardware.md) — specs, network layout
+- [Networking](docs/networking.md) — VLANs, DNS, IP allocations
+- [Disaster Recovery](docs/disaster-recovery.md) — backup strategy, restore procedures

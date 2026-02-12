@@ -1,0 +1,22 @@
+# markdownlint configuration
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+
+# Default: all rules enabled
+default: true
+
+# MD013 - Line length
+# Disable for prose-heavy ADRs and docs; enforcing line length in markdown
+# makes diffs noisy and editing painful.
+MD013: false
+
+# MD024 - No duplicate heading
+# Disable for ADR's following the same format in a single document.
+MD024: false
+
+# MD033 - Inline HTML
+# Allow inline HTML for cases where markdown isn't expressive enough
+MD033: false
+
+# MD041 - First line in file should be a top-level heading
+# All our docs start with an H1, but don't fail on files like LICENSE
+MD041: false

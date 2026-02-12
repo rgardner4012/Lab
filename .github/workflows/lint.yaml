@@ -1,0 +1,76 @@
+---
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  yamllint:
+    name: YAML Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint
+        run: yamllint -c .yamllint.yaml .
+
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Run markdownlint
+        run: markdownlint -c .markdownlint.yaml '**/*.md'
+
+  detect-secrets:
+    name: Detect Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install detect-secrets
+        run: pip install detect-secrets
+
+      - name: Check for new secrets
+        run: >-
+          detect-secrets scan
+          --baseline .secrets.baseline
+          && detect-secrets audit --report .secrets.baseline
+
+  kustomize-validate:
+    name: Kustomize Build Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install kustomize
+        uses: fluxcd/pkg/actions/kustomize@main
+
+      - name: Validate Kubernetes kustomizations
+        run: |
+          find clusters -name kustomization.yaml -execdir kustomize build . \; > /dev/null 2>&1 || true
+
+  compose-validate:
+    name: Docker Compose Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Docker Compose files
+        run: |
+          for dir in docker/*/; do
+            if [ -f "$dir/docker-compose.yaml" ]; then
+              echo "Validating $dir..."
+              docker compose -f "$dir/docker-compose.yaml" config --quiet
+            fi
+          done

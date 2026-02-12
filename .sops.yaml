@@ -1,0 +1,16 @@
+---
+creation_rules:
+  # Docker Compose encrypted .env files
+  - path_regex: docker/.*\.env\.sops$
+    age: >-
+      age1yvyefwwh6avrzpkz2vr3w86ly6q97hdpz02jns2yvaafnjnv448s7jdx7r
+
+  # Kubernetes secrets (bootstrap only — most secrets come from OpenBao)
+  - path_regex: kubernetes/.*\.sops\.yaml$
+    encrypted_regex: ^(data|stringData)$
+    age: >-
+      age1yvyefwwh6avrzpkz2vr3w86ly6q97hdpz02jns2yvaafnjnv448s7jdx7r
+
+# TODO: Replace the age public key above with your actual key.
+# Generate with: age-keygen -o age.key
+# The public key goes here; the private key is stored securely outside the repo.
