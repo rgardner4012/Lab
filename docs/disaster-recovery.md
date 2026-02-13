@@ -24,7 +24,7 @@
 | Component | RPO | RTO | Notes |
 | ----------- | ----- | ----- | ------- |
 | K8s manifests | 0 (in Git) | ~30 min | Flux reconciles from Git |
-| MetalLB | 0 (in Git) | ~5 min | Flux deploys Helm chart then config via depends on|
+| MetalLB | 0 (in Git) | ~5 min | Flux deploys Helm chart then config via depends on |
 | Docker Compose stacks | 0 (in Git) | ~15 min | SSH deploy from Git |
 | Longhorn volumes | Last snapshot | ~1 hr | Restore from Longhorn backup target (NFS Share) |
 | OpenBao data | Last Raft snapshot | ~1 hr | Requires restore + unseal |
