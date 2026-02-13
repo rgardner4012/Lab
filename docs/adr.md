@@ -89,3 +89,21 @@ Keep it as Docker compose on the NAS. HA features of K8s, don't warrant lost fun
 - Requires 2 deployment features.
 - Plex hardware encoding requires direct hw access. This can be accomplished through plugins but adds complexity.
 - Prometheus will require NAS node-exporter for cross platform monitoring.
+
+## 006 - Flux Kustomization chart/config split pattern
+
+### Context
+
+When migrating MetalLB to Flux, applying the Helm chart and its custom resource configuration (IPAddressPool, L2Advertisement) in a single Flux Kustomization causes a race condition on fresh clusters. The CRDs registered by the Helm chart don't exist yet when Flux tries to apply the CR instances, causing transient failures on first reconciliation.
+
+### Decision
+
+Split Helm chart deployments and their post-install CR configuration into two separate Flux Kustomizations with a dependsOn relationship. The chart Kustomization uses wait: true to ensure all pods are healthy before the config Kustomization applies. Adopt this as the standard pattern for any component where CRDs are installed by a Helm chart and then consumed by separate CR manifests.
+
+### Impacts
+
+- Clean first-apply on a fresh cluster with no transient errors or retry noise in logs.
+- Explicit dependency ordering makes the reconciliation sequence readable and predictable.
+- Slightly more files per component (two Flux Kustomizations + two subdirectories instead of one flat directory).
+- Pattern is reusable for future components like cert-manager, Traefik, and external-dns where we want CRDs -> CRs.
+- Debugging is easier since each Flux Kustomization has its own status and can fail independently.

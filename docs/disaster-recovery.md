@@ -25,6 +25,7 @@
 | Component | RPO | RTO | Notes |
 | ----------- | ----- | ----- | ------- |
 | K8s manifests | 0 (in Git) | ~30 min | Flux reconciles from Git |
+| MetalLB | 0 (in Git) | ~5 min | Flux deploys Helm chart then config via depends on|
 | Docker Compose stacks | 0 (in Git) | ~15 min | SSH deploy from Git |
 | Longhorn volumes | Last snapshot | ~1 hr | Restore from Longhorn backup target (NFS Share) |
 | OpenBao data | Last Raft snapshot | ~1 hr | Requires restore + unseal |
@@ -37,10 +38,12 @@
 
 ### Total cluster loss
 
-1. Re-provision NUCs via Elemental Operator (Rancher)
-2. `flux bootstrap github` to reinstall Flux
-3. Flux reconciles all manifests from Git automatically
-4. Longhorn volumes are recreated empty — restore from backup target if needed
+1. Re-provision NUCs via Elemental Operator (Rancher).
+2. `flux bootstrap github` to reinstall Flux.
+3. Flux reconciles all manifests from Git automatically.
+4. MetalLB installs via Helm chart, then IP pool config applies once CRDs are ready.
+5. Longhorn volumes are recreated empty — restore from backup target if needed.
+6. LoadBalancer services get external IPs once MetalLB is healthy.
 
 ### Single node failure
 
@@ -52,7 +55,18 @@ RKE2 reschedules pods to remaining nodes automatically. Longhorn rebuilds volume
 2. For full volume loss, restore from Longhorn backup target (NAS NFS share)
 3. Verify PVCs are bound and workloads are healthy
 
-## PiHole recovery
+### MetalLB recovery
+
+MetalLB is fully managed by Flux via the chart/config split pattern (see [ADR-006](adr.md)). On a fresh cluster:
+
+1. `infra-metallb` Flux Kustomization installs the namespace, HelmRepository, and HelmRelease
+2. Helm installs MetalLB and registers its CRDs — `wait: true` holds until pods are healthy
+3. `infra-metallb-config` Flux Kustomization applies IPAddressPool and L2Advertisement
+4. LoadBalancer services pick up external IPs from the 192.168.0.240-250 range
+
+No manual intervention required.
+
+### PiHole recovery
 
 1. One instance runs on k8s. If it dies, it should migrate to another node. If the entire cluster is down, we still have a second instance running on
 the NAS. If both are down, we've lost the network.

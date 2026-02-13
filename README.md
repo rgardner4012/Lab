@@ -34,13 +34,18 @@ homelab/
         ├── vars/              # Cluster-specific values (IPs, domains)
         │   └── cluster-config.yaml
         ├── infra/             # Foundational platform components
-        │   ├── metallb/
+        │   ├── network/
+        │   │   └── metallb/
+        │   │       ├── ks-chart.yaml   # Flux Kustomization: Helm chart
+        │   │       ├── ks-config.yaml  # Flux Kustomization: IP pool config (dependsOn chart)
+        │   │       ├── chart/          # Namespace, HelmRepository, HelmRelease
+        │   │       └── config/         # IPAddressPool, L2Advertisement
+        │   ├── storage/
+        │   │   ├── longhorn/
+        │   │   └── nfs/
         │   ├── traefik/
         │   ├── cert-manager/
-        │   ├── external-dns/
-        │   └── storage/
-        │       ├── longhorn/
-        │       └── nfs/
+        │   └── external-dns/
         └── apps/              # Cluster applications
             ├── pihole/
             └── monitoring/
