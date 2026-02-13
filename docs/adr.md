@@ -68,7 +68,7 @@ Longhorn enables local disk speed while allowing for ReadWriteMany functionality
 ### Impacts
 
 - About 180Gb usable with 3 replicas in longhorn, maybe 3-400 if we drop to 2 replicas.
-- Media workoads (*arr/plex/usenet) stay on Docker/NAS with local storage.
+- Media workoads (*arr/plex) stay on Docker/NAS with local storage.
 - Longhorn runs a storage engine per node, consuming more RAM/CPU.
 - NFS may not ever be required.
 
@@ -76,7 +76,7 @@ Longhorn enables local disk speed while allowing for ReadWriteMany functionality
 
 ### Context
 
-The Media stack (Plex, Radarr, Sonarr, Prowlar, Configarr, torrent/usenet) requires significant amounts of storage, and was originally setup as docker compose stacks in portainer on the NAS. I need to decide if I want to migrate it to k8s.
+The Media stack (Plex, Radarr, Sonarr, Prowlar, Configarr) requires significant amounts of storage, and was originally setup as docker compose stacks in portainer on the NAS. I need to decide if I want to migrate it to k8s.
 
 ### Decision
 

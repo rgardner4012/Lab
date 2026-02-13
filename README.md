@@ -53,7 +53,7 @@ homelab/
 
 ## Why Hybrid?
 
-Media workloads (Plex, Sonarr, Radarr, torrenting) stay on the NAS as Docker Compose stacks because they need local filesystem access for **hardlinks** (no storage duplication), **QuickSync hardware transcoding**, and direct disk I/O. Kubernetes adds complexity without benefit here.
+Media workloads (Plex, Sonarr, Radarr, DL) stay on the NAS as Docker Compose stacks because they need local filesystem access for **hardlinks** (no storage duplication), **QuickSync hardware transcoding**, and direct disk I/O. Kubernetes adds complexity without benefit here.
 
 Platform services (DNS, monitoring, ingress, secrets management) run on the RKE2 cluster where they benefit from orchestration, self-healing, and LoadBalancer IPs.
 
@@ -61,11 +61,13 @@ See [ADR-005](docs/adr.md) for the full rationale.
 
 ## Getting Started
 
-See [docs/setup-guide.md](docs/setup-guide.md) for the full bootstrap procedure.
+See [docs/setup-guide.md](docs/setup-guide.md) for the full bootstrap procedure. (TODO: Add setup-guide.md)
 
 ## Docs
 
-- [Architecture](docs/architecture.md) — service map, data flows, storage topology
+- [Architecture](docs/ard.md) — service map, data flows, storage topology
+<!--
 - [Hardware](docs/hardware.md) — specs, network layout
-- [Networking](docs/networking.md) — VLANs, DNS, IP allocations
+-->
+- [Networking](docs/network-and-ips.md) — VLANs, DNS, IP allocations
 - [Disaster Recovery](docs/disaster-recovery.md) — backup strategy, restore procedures
