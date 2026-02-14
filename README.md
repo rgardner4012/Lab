@@ -61,7 +61,7 @@ See [ADR-005](docs/adr.md) for the full rationale.
 
 ## Getting Started
 
-See [docs/setup-guide.md](docs/setup-guide.md) for the full bootstrap procedure. (TODO: Add setup-guide.md)
+See <!-- [docs/setup-guide.md](docs/setup-guide.md) --> setup-guide.md, for the full bootstrap procedure. (TODO: Add setup-guide.md)
 
 ## Docs
 
